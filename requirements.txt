@@ -1,3 +1,5 @@
 gTTS==2.3.0
+audio.bitstream
+audio.coders
 streamlit-custome-css==1.0
 streamlit==1.20.0
