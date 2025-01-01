@@ -1,3 +1,4 @@
+--upgrade pip
 gTTS==2.3.0
 audio.bitstream
 audio.coders
