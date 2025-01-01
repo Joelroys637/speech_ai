@@ -1,3 +1,4 @@
 gTTS
 IPython
+streamlit-custome-css
 streamlit
