@@ -1,18 +1,20 @@
 import streamlit as st
 from gtts import gTTS
-from IPython.display import Audio
+import os
 import streamlit_custome_css as leo
 
 
+# Custom CSS styling
 leo.header_hide()
 leo.bg_image("https://64.media.tumblr.com/6c528dab5498d431a101acd4398160b4/tumblr_o7vrxl8Uk11runoqyo10_540.gifv")
+
 # Streamlit UI
+st.markdown("""<center><h1 style="color: #FFFF00;">Text to Speech Converter in Indian Language</h1></center>""", unsafe_allow_html=True)
 
-
-
-st.markdown("""<center><h1 style="color: #FFFF00;">Text to Speech Converter in Indian Language</h1></center>""",unsafe_allow_html=True)
 # Text input for the user to enter text
 text_input = st.text_area("Enter Text", "வணக்கம், எப்படி இருக்கின்றீர்கள்?")
+
+# Supported languages display
 html_code = """
 <html>
 <head>
@@ -82,24 +84,37 @@ html_code = """
 # Render the HTML in Streamlit
 st.markdown(html_code, unsafe_allow_html=True)
 
-
-# Language selection dropdown (default to Tamil 'ta', but can be changed to other languages like 'en', 'fr', etc.)
-language = st.selectbox("Select Language", ["ta", "hi", "en", "te", "kn", "ml", "bn", "mr", "gu", "pa", "or", "as"] )
-
-
-
-
+# Language selection dropdown (default to Tamil 'ta')
+language = st.selectbox(
+    "Select Language",
+    ["ta", "hi", "en", "te", "kn", "ml", "bn", "mr", "gu", "pa", "or", "as"]
+)
 
 # Button to convert text to speech
 if st.button("Convert to Speech"):
-    if text_input:
-        # Generate speech
-        speech = gTTS(text=text_input, lang=language, slow=False,tld="com.au")
-        # Save the speech to an mp3 file
-        speech.save("output.mp3")
+    if text_input.strip():
+        try:
+            # Generate speech using gTTS
+            speech = gTTS(text=text_input, lang=language, slow=False, tld="com.au")
+            file_path = "output.mp3"
+            speech.save(file_path)
 
-        # Provide the audio file as a download link and play it within the app
-        st.audio("output.mp3", format="audio/mp3")
-        st.success(f"Speech saved as 'output.mp3' in {language}!")
+            # Provide the audio file for playback
+            st.audio(file_path, format="audio/mp3")
+
+            # Provide a download link for the file
+            with open(file_path, "rb") as audio_file:
+                audio_bytes = audio_file.read()
+                st.download_button(
+                    label="Download MP3",
+                    data=audio_bytes,
+                    file_name="speech_output.mp3",
+                    mime="audio/mp3",
+                )
+
+
+            st.success(f"Speech generated successfully in '{language}'!")
+        except Exception as e:
+            st.error(f"Error generating speech: {e}")
     else:
         st.warning("Please enter some text.")
