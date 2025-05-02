@@ -1,8 +1,8 @@
 # speech_ai
 
 
-#install streamlit as pip install streamlit 
+# install streamlit as pip install streamlit 
 
 # install pip install requirement.txt
 
-run the code streamlit run main.py
+# run the code streamlit run main.py
